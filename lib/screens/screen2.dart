@@ -61,12 +61,13 @@ class _app_bodyState extends State<app_body> {
         itemCount: negocios_list.length,
         itemBuilder: (BuildContext context, i){
           return Container(
-            color: Colors.amberAccent,
+            // color: Colors.amberAccent,
             padding: EdgeInsets.all(20.0),
             margin: EdgeInsets.all(5.0),
-            child: Text(
-              "Persona"+i.toString()+" "+negocios_list[i]['nombre'].toString()+negocios_list[i]['categoria'].toString(),
-            ),
+            // child: Text(
+            //   "Persona"+i.toString()+" "+negocios_list[i]['nombre'].toString()+negocios_list[i]['categoria'].toString(),
+            // ),
+            child: cardNegocio(img: negocios_list[i]['foto'], txt: negocios_list[i]['nombre'])
           );
       },
       ),
@@ -100,6 +101,35 @@ class bottom_nav extends StatelessWidget {
             label: "Next"
         ),
       ],
+    );
+  }
+}
+
+class cardNegocio extends StatelessWidget {
+  final String img;
+  final String txt;
+  const cardNegocio({required this.img, required this.txt});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35)),
+      margin: EdgeInsets.all(20.0),
+      elevation: 15,
+      color: Colors.amber,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(35),
+        child: Column(
+          children: [
+            Image.network(img),
+            Container(
+                color: Colors.amber,
+                margin: EdgeInsets.all(20.0),
+                child: Text(txt, textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),)
+            )
+          ],
+        ),
+      ),
     );
   }
 }
