@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "592930901285",
+    "project_id": "small-shop-mintic",
+    "storage_bucket": "small-shop-mintic.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592930901285:android:24f8a97599bf1dc0c65ecc",
+        "android_client_info": {
+          "package_name": "com.pakkun.projects"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "592930901285-u1k9l8kcefcbl0gca1e9crsifubf25m8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1lI8z6fdn81sPIZwdMTXAvhK4e-Ed-m8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "592930901285-u1k9l8kcefcbl0gca1e9crsifubf25m8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
