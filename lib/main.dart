@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:projects/screens/register.dart';
 import 'package:projects/screens/screen2.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -48,7 +49,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home"),
+        title: Row(
+            children:[
+              Text("Home"),
+            ]
+        )
       ),
       body: ListView(
           children : [
@@ -108,21 +113,32 @@ class _MyHomePageState extends State<MyHomePage> {
                 child : Row(
                     children:[Icon(Icons.send), Text("Entrar", textAlign: TextAlign.center)]
                 ),
-                onPressed: (){
-                  var user = "Felipe", password = "1234";
+                onPressed: () async{
                   usrnm = usr_field.text;
                   pass = pass_field.text;
+                  CollectionReference clientesReference = FirebaseFirestore.instance.collection("clientes");
+                  QuerySnapshot existsEmail = await clientesReference.where("email", isEqualTo: usrnm).get();
 
-                  if (usrnm == "" || pass == ""){
+                  if (existsEmail.docs.isNotEmpty) {
+                      List foundData = [];
+                      for(var email in existsEmail.docs){
+                          foundData.add(email.data());
+                      }
+                      if (usrnm == foundData[0]['email'] && pass == foundData[0]['password']) {
+                        print(existsEmail.docs[0].data());
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => screen2()));
+                      } else {
+                        print(existsEmail.docs[0].data());
+                        print("Datos erróneos, vuelve a intentarlo");
+                        Fluttertoast.showToast(msg: "Datos erróneos, vuelve a intentarlo");
+                      }
+                  }else if(usrnm=='' && pass==''){
+                    Fluttertoast.showToast(msg: "Por favor ingresa los datos");
+                  }else{
                     print("Por favor ingresa los datos");
-                  } else if(usrnm == user && pass == password){
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (context)=>screen2())
-                    );
-                  } else{
-                    print("Datos erróneos, vuelve a intentarlo");
+                    Fluttertoast.showToast(msg: "El usuario no existe");
                   }
-
                 }
               )
             ),
