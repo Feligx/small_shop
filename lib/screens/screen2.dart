@@ -512,6 +512,14 @@ class menuLateral extends StatelessWidget {
                     context, MaterialPageRoute(builder: (context) => filter_by_negocio()));
               }
           ),
+          ListTile(
+              leading: Icon(Icons.add_alert, size: 30),
+              title: Text("Notificaciones"),
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => mensajes()));
+              }
+          ),
 
         ],
       ),
