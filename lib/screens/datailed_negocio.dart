@@ -58,6 +58,19 @@ class detailed_negocio extends StatelessWidget {
                               ]
                             )
                         ),
+                        Container(
+                            child: Row(
+                                children: [
+                                  TextButton.icon(
+                                    onPressed: (){
+                                      negocio['geolocalizacion'];
+                                    },
+                                    icon: Icon(Icons.),
+                                    label: Text("Ubicación", style: TextStyle(fontSize: 15))
+                                    ,),
+                                ]
+                            )
+                        ),
                         Text("Contacto: "+negocio['contacto'].toString(), style: TextStyle(color: Colors.green),)
                       ]
                   )
