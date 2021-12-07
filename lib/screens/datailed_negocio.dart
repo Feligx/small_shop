@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:projects/screens/detailed_map.dart';
 import 'package:projects/screens/final_pedido.dart';
 import 'package:projects/screens/screen2.dart';
 import 'package:projects/screens/update_cliente.dart';
@@ -63,9 +64,11 @@ class detailed_negocio extends StatelessWidget {
                                 children: [
                                   TextButton.icon(
                                     onPressed: (){
-                                      negocio['geolocalizacion'];
+                                      //negocio['geolocalizacion'];
+                                      print(negocio['nombre']);
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=>detailed_map(nombre: negocio['nombre'], positionNegocio: negocio['geolocalizacion'],)));
                                     },
-                                    icon: Icon(Icons.),
+                                    icon: Icon(Icons.location_pin),
                                     label: Text("Ubicación", style: TextStyle(fontSize: 15))
                                     ,),
                                 ]
