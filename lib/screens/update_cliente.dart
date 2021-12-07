@@ -5,6 +5,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:projects/main.dart';
+import 'package:projects/screens/screen2.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'filterbynegocio.dart';
 
 class updateCliente extends StatefulWidget {
   final String email;
@@ -23,7 +27,6 @@ class _updateClienteState extends State<updateCliente> {
   final name_field = TextEditingController();
   final dir_field = TextEditingController();
   final tel_field = TextEditingController();
-  final id_field = TextEditingController();
 
   void initState(){
     super.initState();
@@ -40,34 +43,52 @@ class _updateClienteState extends State<updateCliente> {
 
     if (user.docs.isNotEmpty){
       dataCliente.add(user.docs[0].data());
+      print(dataCliente);
       name=dataCliente[0]['nombre'];
       pass=dataCliente[0]['password'];
       tel=dataCliente[0]['telefono'];
-      dir=dataCliente[0]['dir'];
+      dir=dataCliente[0]['direccion'];
+      setState(() {
+        pass_field.text=pass;
+        name_field.text=name;
+        dir_field.text=dir;
+        tel_field.text=tel;
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
 
-    // pass_field.text=pass;
-    // name_field.text=name;
-    // dir_field.text=dir;
-    // tel_field.text=dir;
-    // id_field.text=dir;
+    setState(() {
+      pass_field.text=pass;
+      name_field.text=name;
+      dir_field.text=dir;
+      tel_field.text=tel;
+    });
 
     return Scaffold(
       appBar: AppBar(
         title: Row(
           children:[
             Text("Editar Cuenta"),
-            IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back))
           ]
         )
       ),
       drawer: Drawer(),
       body: ListView(
         children: [
+          Container(
+            margin: EdgeInsets.only(top: 30.0),
+              padding: EdgeInsets.only(left: 20.0,top: 0.0,right: 20.0,bottom: 20.0),
+              child:TextField(
+                controller: name_field,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Nombre',
+                ),
+              )
+          ),
           Container(
               padding: EdgeInsets.only(left: 20.0,top: 0.0,right: 20.0,bottom: 20.0),
               child:TextField(
@@ -76,16 +97,6 @@ class _updateClienteState extends State<updateCliente> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Contraseña',
-                ),
-              )
-          ),
-          Container(
-              padding: EdgeInsets.only(left: 20.0,top: 0.0,right: 20.0,bottom: 20.0),
-              child:TextField(
-                controller: name_field,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Nombre',
                 ),
               )
           ),
@@ -112,7 +123,7 @@ class _updateClienteState extends State<updateCliente> {
           Row(
             children: [
               Container(
-                padding: EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(40.0),
                 child: ElevatedButton(
                   onPressed: () async{
                     CollectionReference clienteReference = FirebaseFirestore.instance.collection("clientes");
@@ -158,6 +169,59 @@ class _updateClienteState extends State<updateCliente> {
           )
         ],
       )
+    );
+  }
+}
+
+class menuLateral extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+              decoration: BoxDecoration(color : Colors.green),
+              child: Image.network("http://bluerocketlab.com/wp-content/uploads/2020/04/BR_logo_2019_bl@500.png")
+          ),
+          ListTile(
+              leading: Icon(Icons.account_circle_rounded, size: 30),
+              title: Text("Actualizar cuenta"),
+              onTap: () async{
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                String email = prefs.getString('email').toString();
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => updateCliente(email: email)));
+              }
+          ),
+          ListTile(
+              leading: Icon(Icons.search, size: 30),
+              title: Text("Consultar Negocios"),
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => screen2()));
+              }
+          ),
+          ListTile(
+              leading: Icon(Icons.filter_alt_rounded, size: 30),
+              title: Text("Filtrar negocios"),
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => filter_by_negocio()));
+              }
+          ),
+          ListTile(
+              leading: Icon(Icons.shopping_cart_rounded, size: 30),
+              title: Text("Mi carrito"),
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => filter_by_negocio()));
+              }
+          ),
+
+        ],
+      ),
     );
   }
 }

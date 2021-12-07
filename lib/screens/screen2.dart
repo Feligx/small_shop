@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:projects/main.dart';
+import 'package:projects/screens/result_by_negocio.dart';
+import 'package:projects/screens/update_cliente.dart';
 import 'dart:math' as math;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'datailed_negocio.dart';
 import 'filterbynegocio.dart';
@@ -31,7 +34,7 @@ class screen2 extends StatelessWidget {
       appBar: AppBar(
         title: Text("Listado de Negocios")
         ),
-      drawer: Drawer(),
+      drawer: menuLateral(),
       body: app_body(),
       // bottomNavigationBar: bottom_nav(),
     //   floatingActionButton: FloatingActionButton.extended(
@@ -458,6 +461,59 @@ class ActionButton extends StatelessWidget {
           onPressed: onPressed,
           icon: icon,
         ),
+      ),
+    );
+  }
+}
+
+class menuLateral extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+              decoration: BoxDecoration(color : Colors.green),
+              child: Image.network("http://bluerocketlab.com/wp-content/uploads/2020/04/BR_logo_2019_bl@500.png")
+          ),
+          ListTile(
+              leading: Icon(Icons.account_circle_rounded, size: 30),
+              title: Text("Actualizar cuenta"),
+              onTap: () async{
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                String email = prefs.getString('email').toString();
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => updateCliente(email: email)));
+              }
+          ),
+          ListTile(
+              leading: Icon(Icons.search, size: 30),
+              title: Text("Consultar Negocios"),
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => screen2()));
+              }
+          ),
+          ListTile(
+              leading: Icon(Icons.filter_alt_rounded, size: 30),
+              title: Text("Filtrar negocios"),
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => filter_by_negocio()));
+              }
+          ),
+          ListTile(
+              leading: Icon(Icons.shopping_cart_rounded, size: 30),
+              title: Text("Mi carrito"),
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => filter_by_negocio()));
+              }
+          ),
+
+        ],
       ),
     );
   }

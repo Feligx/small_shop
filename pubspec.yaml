@@ -39,6 +39,7 @@ dependencies:
   cloud_firestore:
   firebase_messaging:
   fluttertoast: ^8.0.8
+  shared_preferences:
 
 dev_dependencies:
   flutter_test:

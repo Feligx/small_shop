@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:projects/screens/datailed_negocio.dart';
+import 'package:projects/screens/screen2.dart';
+import 'package:projects/screens/update_cliente.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'filterbynegocio.dart';
 
 class result_by_negocio extends StatefulWidget {
 
@@ -22,22 +27,6 @@ class _result_by_negocioState extends State<result_by_negocio> {
   void initState(){
     super.initState();
     getFilterProduct();
-  }
-
-  void getFilterCategory() async{
-    CollectionReference negocio = FirebaseFirestore.instance.collection("negocios");
-    QuerySnapshot negocioFiltered = await negocio.where("categoria", isEqualTo:widget.filter).orderBy("nombre", descending: false).get();
-    //TODO implement second foo to redo the filter by category, despite it could be useless since the categ separation is done in previous screen
-    if (negocioFiltered.docs.length != 0){
-      for(var neg in negocioFiltered.docs){
-        setState(() {
-          negocios_list.add(neg.data());
-          print(neg.data());
-        });
-      }
-    }else{
-      print("No deberías de llegar aquí (╯°□°）╯︵ ┻━┻ ... a menos q no hayan datos ¯|_(ツ)_/¯");
-    }
   }
 
   void getFilterProduct() async{
@@ -84,7 +73,7 @@ class _result_by_negocioState extends State<result_by_negocio> {
       appBar: AppBar(
         title: Text("Resultados: "+widget.filter),
       ),
-      drawer: Drawer(),
+      drawer: menuLateral(),
       body: Center(
         child: ListView.builder(
             itemCount: negocios_list.length,
@@ -210,6 +199,51 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           isExpanded: item.isExpanded,
         );
       }).toList(),
+    );
+  }
+}
+
+class menuLateral extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+              decoration: BoxDecoration(color : Colors.green),
+              child: Image.network("http://bluerocketlab.com/wp-content/uploads/2020/04/BR_logo_2019_bl@500.png")
+          ),
+          ListTile(
+              leading: Icon(Icons.account_circle_rounded, size: 30),
+              title: Text("Actualizar cuenta"),
+              onTap: () async{
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                String email = prefs.getString('email').toString();
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => updateCliente(email: email)));
+              }
+          ),
+          ListTile(
+              leading: Icon(Icons.search, size: 30),
+              title: Text("Consultar Negocios"),
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => screen2()));
+              }
+          ),
+          ListTile(
+              leading: Icon(Icons.filter_alt_rounded, size: 30),
+              title: Text("Filtrar negocios"),
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => filter_by_negocio()));
+              }
+          ),
+
+        ],
+      ),
     );
   }
 }

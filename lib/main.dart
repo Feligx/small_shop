@@ -4,6 +4,7 @@ import 'package:projects/screens/register.dart';
 import 'package:projects/screens/screen2.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
             //   onPressed: () {},
             // ),
             Center(
-              child: Text('Registro')
+              child: Text('Log-in')
             ),
             Container(
               padding: EdgeInsets.all(20.0),
@@ -118,6 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   pass = pass_field.text;
                   CollectionReference clientesReference = FirebaseFirestore.instance.collection("clientes");
                   QuerySnapshot existsEmail = await clientesReference.where("email", isEqualTo: usrnm).get();
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
 
                   if (existsEmail.docs.isNotEmpty) {
                       List foundData = [];
@@ -126,6 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       }
                       if (usrnm == foundData[0]['email'] && pass == foundData[0]['password']) {
                         print(existsEmail.docs[0].data());
+                        prefs.setString('email', usrnm);
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) => screen2()));
                       } else {
